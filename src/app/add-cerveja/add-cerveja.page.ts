@@ -10,7 +10,7 @@ export class AddCervejaPage implements OnInit {
   constructor() { }
 
   ngOnInit() {
-     this.mensagem=''
+     this.mensagem= " "
   }
   mensagem;
 
@@ -18,10 +18,21 @@ export class AddCervejaPage implements OnInit {
     const cervejaString = JSON.stringify(form.value);
     const nomeCerveja = form.value.nome
     
-    sessionStorage.setItem(nomeCerveja, cervejaString)
+    sessionStorage.setItem(nomeCerveja, cervejaString);
     
+    let chavesDisponiveis = sessionStorage.getItem ('chaves');
+
+    if (chavesDisponiveis !==null){
+      chavesDisponiveis = chavesDisponiveis + ';' + nomeCerveja;
+    } else {
+      chavesDisponiveis = nomeCerveja; 
+    }
+
+    sessionStorage.setItem('chaves', chavesDisponiveis);
+
     form.reset()
     this.mensagem='Cadastrado com sucesso.'
+    console.log('As chaves disponiveis são:', chavesDisponiveis)
   }
 
 }
