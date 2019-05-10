@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -6,27 +7,43 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  
+
+  constructor(private router:Router) {
+    this.cervejas = []
+  }
+
   cervejas;
 
-  ngOnInit(){
+  ngOnInit() { }
+
+  excluir(nome) {
+    localStorage.removeItem(nome)
+    this.listar()
+  }
+  detalhes(nome){
+    this.router.navigate(["/cerveja-detalhes", nome])
     
   }
-  ionViewDidEnter (){
-    this.cervejas = [];
 
-    const chavesDisponiveis =  sessionStorage.getItem('chaves');
-    console.log (chavesDisponiveis)
+  listar() {
+    this.cervejas = []
 
-    const chavesSeparadas = chavesDisponiveis.split(';');
+    const tamanhoDoBanco = localStorage.length
 
-    console.log(chavesSeparadas)
+    for (let index = 0; index < tamanhoDoBanco; index++) {
+      const chave = localStorage.key(index)
+      const cerveja = localStorage.getItem(chave)
+      const cervjaReal = JSON.parse(cerveja)
 
-    for (var i=0; i< chavesSeparadas.length; i++){
-      const cerveja = sessionStorage.getItem (chavesSeparadas[i]);
-      const cervejaObj = JSON.parse(cerveja);
-      this.cervejas.push(cervejaObj)
+      const cervejaReal = JSON.parse(cerveja)
+      this.cervejas.push(cervejaReal)
     }
 
   }
+
+  ionViewDidEnter() {
+    this.listar()
+  }
+
 }
+
